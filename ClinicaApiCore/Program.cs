@@ -1,4 +1,8 @@
 using ClinicaApiCore.DB;
+using ClinicaApiCore.Repositories;
+using ClinicaApiCore.Repositories.Imp;
+using ClinicaApiCore.Services;
+using ClinicaApiCore.Services.Imp;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,6 +15,9 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<AppDbContext>(op => op.UseSqlServer(builder.Configuration.GetConnectionString("ApiRestConnectionString")));
+
+builder.Services.AddScoped<IMedicosService, MedicosService>();
+builder.Services.AddTransient<IMedicosRepository, MedicosRepository>();
 
 var app = builder.Build();
 
