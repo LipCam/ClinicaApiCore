@@ -1,5 +1,6 @@
 ﻿using ClinicaApiCore.DB;
-using ClinicaApiCore.DTOs;
+using ClinicaApiCore.DTOs.Medicos;
+using ClinicaApiCore.Entities;
 
 namespace ClinicaApiCore.Repositories.Imp
 {
@@ -12,6 +13,26 @@ namespace ClinicaApiCore.Repositories.Imp
             _appDbContext = appDbContext;
         }
 
+        public MedicosDTO Add(Medicos entity)
+        {
+            _appDbContext.Medicos.Add(entity);
+            _appDbContext.SaveChanges();
+
+            return new MedicosDTO() { IdMedico = entity.ID_MEDICO_LONG, Nome = entity.NOME_STR, NumRegistro = entity.NUM_REGISTRO_STR };
+        }
+
+        public void Edit(Medicos entity)
+        {
+            _appDbContext.Medicos.Update(entity);
+            _appDbContext.SaveChanges();
+        }
+
+        public void Delete(Medicos entity)
+        {
+            _appDbContext.Medicos.Remove(entity);
+            _appDbContext.SaveChanges();
+        }        
+
         public List<MedicosDTO> GetAll()
         {
             return _appDbContext.Medicos.Select(p=> 
@@ -22,14 +43,9 @@ namespace ClinicaApiCore.Repositories.Imp
             }).ToList();
         }
 
-        public MedicosDTO GetById(long Id)
+        public Medicos GetById(long Id)
         {
-            return _appDbContext.Medicos.Select(p =>
-                new MedicosDTO()
-                {
-                    Nome = p.NOME_STR,
-                    NumRegistro = p.NUM_REGISTRO_STR
-                }).FirstOrDefault(p => p.IdMedico == Id);
+            return _appDbContext.Medicos.FirstOrDefault(p => p.ID_MEDICO_LONG == Id);            
         }
     }
 }
