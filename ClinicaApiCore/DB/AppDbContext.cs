@@ -13,5 +13,9 @@ namespace ClinicaApiCore.DB
         #region ----- Medicos -----
         public DbSet<Medicos> Medicos { get; set; }
         #endregion
+
+        #region ----- Procedimentos -----
+        public DbSet<Procedimentos> Procedimentos { get; set; }
+        #endregion
     }
 }

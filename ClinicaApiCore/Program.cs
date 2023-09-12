@@ -19,6 +19,9 @@ builder.Services.AddDbContext<AppDbContext>(op => op.UseSqlServer(builder.Config
 builder.Services.AddScoped<IMedicosService, MedicosService>();
 builder.Services.AddTransient<IMedicosRepository, MedicosRepository>();
 
+builder.Services.AddScoped<IProcedimentosService, ProcedimentosService>();
+builder.Services.AddTransient<IProcedimentosRepository, ProcedimentosRepository>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
