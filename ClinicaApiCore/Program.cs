@@ -22,6 +22,9 @@ builder.Services.AddTransient<IMedicosRepository, MedicosRepository>();
 builder.Services.AddScoped<IProcedimentosService, ProcedimentosService>();
 builder.Services.AddTransient<IProcedimentosRepository, ProcedimentosRepository>();
 
+builder.Services.AddScoped<IPacientesService, PacientesService>();
+builder.Services.AddTransient<IPacientesRepository, PacientesRepository>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
