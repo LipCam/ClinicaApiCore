@@ -57,14 +57,12 @@ namespace ClinicaApiCore.Services.Imp
         public ProcedimentosDTO GetById(long Id)
         {
             Procedimentos Procedimentos = _repository.GetById(Id);
-            if (Procedimentos != null)
-                return new ProcedimentosDTO()
-                {
-                    IdProcedimento = Procedimentos.ID_PROCEDIMENTO_LONG,
-                    Descricao = Procedimentos.DESCRICAO_STR,
-                };
-
-            return null;
+            return new ProcedimentosDTO()
+            {
+                IdProcedimento = Procedimentos.ID_PROCEDIMENTO_LONG,
+                Descricao = Procedimentos.DESCRICAO_STR,
+                Valor = Procedimentos.VALOR_DEC,
+            };
         }
     }
 }

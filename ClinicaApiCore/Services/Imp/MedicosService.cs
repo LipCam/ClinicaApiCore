@@ -59,15 +59,12 @@ namespace ClinicaApiCore.Services.Imp
         public MedicosDTO GetById(long Id)
         {
             Medicos medicos = _repository.GetById(Id);
-            if (medicos != null)
-                return new MedicosDTO()
-                {
-                    IdMedico = medicos.ID_MEDICO_LONG,
-                    Nome = medicos.NOME_STR,
-                    NumRegistro = medicos.NUM_REGISTRO_STR
-                };
-
-            return null;
+            return new MedicosDTO()
+            {
+                IdMedico = medicos.ID_MEDICO_LONG,
+                Nome = medicos.NOME_STR,
+                NumRegistro = medicos.NUM_REGISTRO_STR
+            };
         }
     }
 }
