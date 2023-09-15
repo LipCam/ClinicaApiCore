@@ -13,7 +13,7 @@ namespace ClinicaApiCore.Services.Imp
             _repository = repository;
         }
 
-        public ProcedimentosDTO Add(AddProcedimentoRequestDTO addEditProcedimentosRequestDTO)
+        public ProcedimentosDTO Add(AddEditProcedimentoRequestDTO addEditProcedimentosRequestDTO)
         {
             return _repository.Add(new Procedimentos()
             {
@@ -22,13 +22,13 @@ namespace ClinicaApiCore.Services.Imp
             });
         }
 
-        public RequestProcedimentoResultDTO Edit(EditProcedimentoRequestDTO editEditProcedimentosRequestDTO)
+        public RequestProcedimentoResultDTO Edit(long Id, AddEditProcedimentoRequestDTO addEditProcedimentosRequestDTO)
         {
-            Procedimentos entity = _repository.GetById(editEditProcedimentosRequestDTO.IdProcedimento);
+            Procedimentos entity = _repository.GetById(Id);
             if (entity != null)
             {
-                entity.DESCRICAO_STR = editEditProcedimentosRequestDTO.Descricao;
-                entity.VALOR_DEC = editEditProcedimentosRequestDTO.Valor != null ? editEditProcedimentosRequestDTO.Valor.Value : 0;
+                entity.DESCRICAO_STR = addEditProcedimentosRequestDTO.Descricao;
+                entity.VALOR_DEC = addEditProcedimentosRequestDTO.Valor != null ? addEditProcedimentosRequestDTO.Valor.Value : 0;
                 _repository.Edit(entity);
 
                 return new RequestProcedimentoResultDTO() { Result = "OK", Message = "Edição realizada com sucesso" };
@@ -56,13 +56,16 @@ namespace ClinicaApiCore.Services.Imp
 
         public ProcedimentosDTO GetById(long Id)
         {
-            Procedimentos Procedimentos = _repository.GetById(Id);
-            return new ProcedimentosDTO()
-            {
-                IdProcedimento = Procedimentos.ID_PROCEDIMENTO_LONG,
-                Descricao = Procedimentos.DESCRICAO_STR,
-                Valor = Procedimentos.VALOR_DEC,
-            };
+            Procedimentos procedimentos = _repository.GetById(Id);
+            if (procedimentos != null)
+                return new ProcedimentosDTO()
+                {
+                    IdProcedimento = procedimentos.ID_PROCEDIMENTO_LONG,
+                    Descricao = procedimentos.DESCRICAO_STR,
+                    Valor = procedimentos.VALOR_DEC
+                };
+
+            return null;
         }
     }
 }

@@ -13,7 +13,7 @@ namespace ClinicaApiCore.Services.Imp
             _repository = repository;
         }
 
-        public PacientesDTO Add(AddPacienteRequestDTO addEditPacienteRequestDTO)
+        public PacientesDTO Add(AddEditPacienteRequestDTO addEditPacienteRequestDTO)
         {
             return _repository.Add(new Pacientes()
             {
@@ -23,14 +23,14 @@ namespace ClinicaApiCore.Services.Imp
             });
         }
 
-        public RequestPacienteResultDTO Edit(EditPacienteRequestDTO editEditPacienteRequestDTO)
+        public RequestPacienteResultDTO Edit(long Id, AddEditPacienteRequestDTO addEditEditPacienteRequestDTO)
         {
-            Pacientes entity = _repository.GetById(editEditPacienteRequestDTO.IdPaciente);
+            Pacientes entity = _repository.GetById(Id);
             if (entity != null)
             {
-                entity.NOME_STR = editEditPacienteRequestDTO.Nome;
-                entity.CPF_STR = editEditPacienteRequestDTO.CPF;
-                entity.CELULAR_STR = editEditPacienteRequestDTO.Celular;
+                entity.NOME_STR = addEditEditPacienteRequestDTO.Nome;
+                entity.CPF_STR = addEditEditPacienteRequestDTO.CPF;
+                entity.CELULAR_STR = addEditEditPacienteRequestDTO.Celular;
                 _repository.Edit(entity);
 
                 return new RequestPacienteResultDTO() { Result = "OK", Message = "Edição realizada com sucesso" };
@@ -58,14 +58,17 @@ namespace ClinicaApiCore.Services.Imp
 
         public PacientesDTO GetById(long Id)
         {
-            Pacientes Pacientes = _repository.GetById(Id);
-            return new PacientesDTO()
-            {
-                IdPaciente = Pacientes.ID_PACIENTE_LONG,
-                Nome = Pacientes.NOME_STR,
-                CPF = Pacientes.CPF_STR,
-                Celular = Pacientes.CELULAR_STR
-            };
+            Pacientes pacientes = _repository.GetById(Id);
+            if (pacientes != null)
+                return new PacientesDTO()
+                {
+                    IdPaciente = pacientes.ID_PACIENTE_LONG,
+                    Nome = pacientes.NOME_STR,
+                    CPF = pacientes.CPF_STR,
+                    Celular = pacientes.CELULAR_STR
+                };
+
+            return null;
         }
     }
 }

@@ -16,14 +16,13 @@ namespace ClinicaApiCore.Controllers
         }
 
         [HttpGet]
-        [Route("getAll")]
         public IActionResult GetAll()
         {
             return Ok(_service.GetAll());
         }
 
         [HttpGet]
-        [Route("getById")]
+        [Route("{Id}")]
         public IActionResult GetById(long Id)
         {
             ProcedimentosDTO ProcedimentosDTO = _service.GetById(Id);
@@ -34,28 +33,24 @@ namespace ClinicaApiCore.Controllers
         }
 
         [HttpPost]
-        [Route("addProcedimento")]
-        public IActionResult addProcedimento([FromBody] AddProcedimentoRequestDTO addProcedimentoRequestDTO)
+        public IActionResult addProcedimento([FromBody] AddEditProcedimentoRequestDTO addEditProcedimentoRequestDTO)
         {
-            if (addProcedimentoRequestDTO.Descricao == "")
+            if (addEditProcedimentoRequestDTO.Descricao == "")
                 return BadRequest(new { Result = "Erro", Message = "Campo Descricao deve ser preenchido" });
 
-            ProcedimentosDTO ProcedimentosDTO = _service.Add(addProcedimentoRequestDTO);
+            ProcedimentosDTO ProcedimentosDTO = _service.Add(addEditProcedimentoRequestDTO);
             
             return Ok(ProcedimentosDTO);
         }
 
         [HttpPut]
-        [Route("editProcedimento")]
-        public IActionResult editProcedimento([FromBody] EditProcedimentoRequestDTO editProcedimentoRequestDTO)
+        [Route("{Id}")]
+        public IActionResult editProcedimento(long Id, [FromBody] AddEditProcedimentoRequestDTO addEditProcedimentoRequestDTO)
         {
-            if (editProcedimentoRequestDTO.IdProcedimento == 0)
-                return BadRequest(new { Result = "Erro", Message = "Campo Id deve ser preenchido" });
-
-            if (editProcedimentoRequestDTO.Descricao == "")
+            if (addEditProcedimentoRequestDTO.Descricao == "")
                 return BadRequest(new { Result = "Erro", Message = "Campo Descricao deve ser preenchido" });
 
-            RequestProcedimentoResultDTO requestProcedimentoResultDTO = _service.Edit(editProcedimentoRequestDTO);
+            RequestProcedimentoResultDTO requestProcedimentoResultDTO = _service.Edit(Id, addEditProcedimentoRequestDTO);
 
             if (requestProcedimentoResultDTO.Result == "OK")
                 return Ok(requestProcedimentoResultDTO);
@@ -64,7 +59,7 @@ namespace ClinicaApiCore.Controllers
         }
 
         [HttpDelete]
-        [Route("deleteProcedimento")]
+        [Route("{Id}")]
         public IActionResult deleteProcedimento(long Id)
         {
             RequestProcedimentoResultDTO requestProcedimentoResultDTO = _service.Delete(Id);

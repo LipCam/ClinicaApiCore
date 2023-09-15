@@ -13,7 +13,7 @@ namespace ClinicaApiCore.Services.Imp
             _repository = repository;
         }
 
-        public MedicosDTO Add(AddMedicoRequestDTO addEditMedicoRequestDTO)
+        public MedicosDTO Add(AddEditMedicoRequestDTO addEditMedicoRequestDTO)
         {
             return _repository.Add(new Medicos()
             {
@@ -23,14 +23,14 @@ namespace ClinicaApiCore.Services.Imp
             });
         }
 
-        public RequestMedicoResultDTO Edit(EditMedicoRequestDTO editEditMedicoRequestDTO)
+        public RequestMedicoResultDTO Edit(long Id, AddEditMedicoRequestDTO addEditEditMedicoRequestDTO)
         {
-            Medicos entity = _repository.GetById(editEditMedicoRequestDTO.IdMedico);
+            Medicos entity = _repository.GetById(Id);
             if (entity != null)
             {
-                entity.NOME_STR = editEditMedicoRequestDTO.Nome;
-                entity.CPF_STR = editEditMedicoRequestDTO.CPF;
-                entity.NUM_REGISTRO_STR = editEditMedicoRequestDTO.NumRegistro;
+                entity.NOME_STR = addEditEditMedicoRequestDTO.Nome;
+                entity.CPF_STR = addEditEditMedicoRequestDTO.CPF;
+                entity.NUM_REGISTRO_STR = addEditEditMedicoRequestDTO.NumRegistro;
                 _repository.Edit(entity);
 
                 return new RequestMedicoResultDTO() { Result = "OK", Message = "Edição realizada com sucesso" };
@@ -59,12 +59,15 @@ namespace ClinicaApiCore.Services.Imp
         public MedicosDTO GetById(long Id)
         {
             Medicos medicos = _repository.GetById(Id);
-            return new MedicosDTO()
-            {
-                IdMedico = medicos.ID_MEDICO_LONG,
-                Nome = medicos.NOME_STR,
-                NumRegistro = medicos.NUM_REGISTRO_STR
-            };
+            if (medicos != null)
+                return new MedicosDTO()
+                {
+                    IdMedico = medicos.ID_MEDICO_LONG,
+                    Nome = medicos.NOME_STR,
+                    NumRegistro = medicos.NUM_REGISTRO_STR
+                };
+
+            return null;
         }
     }
 }

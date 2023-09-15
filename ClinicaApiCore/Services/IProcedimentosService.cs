@@ -6,8 +6,8 @@ namespace ClinicaApiCore.Services
     {
         List<ProcedimentosDTO> GetAll();
         ProcedimentosDTO GetById(long Id);
-        ProcedimentosDTO Add(AddProcedimentoRequestDTO addProcedimentoRequestDTO);
-        RequestProcedimentoResultDTO Edit(EditProcedimentoRequestDTO editProcedimentoRequestDTO);
+        ProcedimentosDTO Add(AddEditProcedimentoRequestDTO addProcedimentoRequestDTO);
+        RequestProcedimentoResultDTO Edit(long Id, AddEditProcedimentoRequestDTO addProcedimentoRequestDTO);
         RequestProcedimentoResultDTO Delete(long Id);
     }
 }

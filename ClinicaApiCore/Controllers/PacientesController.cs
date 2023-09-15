@@ -16,14 +16,13 @@ namespace ClinicaApiCore.Controllers
         }
 
         [HttpGet]
-        [Route("getAll")]
         public IActionResult GetAll()
         {
             return Ok(_service.GetAll());
         }
 
         [HttpGet]
-        [Route("getById")]
+        [Route("{Id}")]
         public IActionResult GetById(long Id)
         {
             PacientesDTO PacientesDTO = _service.GetById(Id);
@@ -34,8 +33,7 @@ namespace ClinicaApiCore.Controllers
         }
 
         [HttpPost]
-        [Route("addPaciente")]
-        public IActionResult addPaciente([FromBody] AddPacienteRequestDTO addPacienteRequestDTO)
+        public IActionResult addPaciente([FromBody] AddEditPacienteRequestDTO addPacienteRequestDTO)
         {
             if (addPacienteRequestDTO.Nome == "")
                 return BadRequest(new { Result = "Erro", Message = "Campo Nome deve ser preenchido" });
@@ -49,19 +47,16 @@ namespace ClinicaApiCore.Controllers
         }
 
         [HttpPut]
-        [Route("editPaciente")]
-        public IActionResult editPaciente([FromBody] EditPacienteRequestDTO editPacienteRequestDTO)
+        [Route("{Id}")]
+        public IActionResult editPaciente(long Id, [FromBody] AddEditPacienteRequestDTO addEditPacienteRequestDTO)
         {
-            if (editPacienteRequestDTO.IdPaciente == 0)
-                return BadRequest(new { Result = "Erro", Message = "Campo Id deve ser preenchido" });
-
-            if (editPacienteRequestDTO.Nome == "")
+            if (addEditPacienteRequestDTO.Nome == "")
                 return BadRequest(new { Result = "Erro", Message = "Campo Nome deve ser preenchido" });
 
-            if (editPacienteRequestDTO.CPF == "")
+            if (addEditPacienteRequestDTO.CPF == "")
                 return BadRequest(new { Result = "Erro", Message = "Campo CPF deve ser preenchido" });
 
-            RequestPacienteResultDTO requestPacienteResultDTO = _service.Edit(editPacienteRequestDTO);
+            RequestPacienteResultDTO requestPacienteResultDTO = _service.Edit(Id, addEditPacienteRequestDTO);
 
             if (requestPacienteResultDTO.Result == "OK")
                 return Ok(requestPacienteResultDTO);
@@ -70,7 +65,7 @@ namespace ClinicaApiCore.Controllers
         }
 
         [HttpDelete]
-        [Route("deletePaciente")]
+        [Route("deletePaciente/{Id}")]
         public IActionResult deletePaciente(long Id)
         {
             RequestPacienteResultDTO requestPacienteResultDTO = _service.Delete(Id);
