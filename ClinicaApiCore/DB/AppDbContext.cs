@@ -24,6 +24,7 @@ namespace ClinicaApiCore.DB
 
         #region ----- Agendas -----
         public DbSet<Agendas> Agendas { get; set; }
+        public DbSet<AgendasVW> AgendasVW { get; set; }
         #endregion
     }
 }
