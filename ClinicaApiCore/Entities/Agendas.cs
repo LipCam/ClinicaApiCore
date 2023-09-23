@@ -11,7 +11,7 @@ namespace ClinicaApiCore.Entities
         public DateTime DATA_DTI { get; set; }
 
         /// <summary>
-        /// <para>0-Livre</para><para>1-Agendado</para><para>2-Em atendimento</para><para>3-Atendido</para><para>4-Cancelado</para>
+        /// <para>0-Livre</para><para>1-Agendado</para><para>2-Em atendimento</para><para>3-Atendido</para>
         /// </summary>
         public int ID_STATUS_INT { get; set; }
 

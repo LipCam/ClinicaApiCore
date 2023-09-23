@@ -24,11 +24,41 @@ namespace ClinicaApiCore.Controllers
         }
 
         [HttpGet]
-        [Route("Paciente/{Id}")]
-        public IActionResult GetById(long Id)
+        [Route("Paciente/{IdPaciente}")]
+        public IActionResult GetById(long IdPaciente)
         {
-            List<AgendasDTO> lstAgendasDTO = _service.GetByPaciente(Id);
+            List<AgendasDTO> lstAgendasDTO = _service.GetByPaciente(IdPaciente);
             return Ok(lstAgendasDTO);
+        }
+
+        [HttpPost]
+        public IActionResult RealizarAgendamento([FromBody] RealizarAgdRequest realizarAgdRequest)
+        {  
+            if (realizarAgdRequest.IdAgenda == 0)
+                return BadRequest(new AgendamentodResponse() { Resultado = "ERRO", Mensagem = "Campo IdAgenda deve ser preenchido" });
+
+            if (realizarAgdRequest.IdPaciente == 0)
+                return BadRequest(new AgendamentodResponse() { Resultado = "ERRO", Mensagem = "Campo IdPaciente deve ser preenchido" });
+
+            AgendamentodResponse objAgendamentodResponse = _service.RealizarAgendamento(realizarAgdRequest.IdAgenda, realizarAgdRequest.IdPaciente);
+            if (objAgendamentodResponse.Resultado == "OK")
+                return Ok(objAgendamentodResponse);
+            else
+                return BadRequest(objAgendamentodResponse);
+        }
+
+        [HttpDelete]
+        [Route("{IdAgenda}")]
+        public IActionResult CancelarAgendamento(long IdAgenda)
+        {
+            if (IdAgenda == 0)
+                return BadRequest(new AgendamentodResponse() { Resultado = "ERRO", Mensagem = "Campo IdAgenda deve ser preenchido" });
+
+            AgendamentodResponse objAgendamentodResponse = _service.CancelarAgendamento(IdAgenda);
+            if (objAgendamentodResponse.Resultado == "OK")
+                return Ok(objAgendamentodResponse);
+            else
+                return BadRequest(objAgendamentodResponse);
         }
     }
 }
