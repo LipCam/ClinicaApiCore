@@ -4,8 +4,6 @@ using ClinicaApiCore.Entities;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using System.Data;
-using System.Net.NetworkInformation;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace ClinicaApiCore.Repositories.Imp
 {
@@ -20,7 +18,7 @@ namespace ClinicaApiCore.Repositories.Imp
 
         public Agendas GetById(long Id)
         {
-            return _appDbContext.Agendas.FirstOrDefault(p => p.ID_PROCEDIMENTO_LONG == Id);            
+            return _appDbContext.Agendas.FirstOrDefault(p => p.ID_AGENDA_LONG == Id);            
         }
 
         public List<AgendasDTO> GetByLivres(DateTime DataInicio, DateTime DataFim, long IdProcedimento, long IdMedico)

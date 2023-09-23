@@ -46,6 +46,7 @@ namespace ClinicaApiCore.Services.Imp
 
             objAgendas.ID_PACIENTE_LONG = IdPaciente;
             objAgendas.ID_STATUS_INT = 1;
+            objAgendas.DATA_AGENDAMENTO_DTI = DateTime.Now;
             _repository.Update(objAgendas);
 
             return new AgendamentodResponse() { Resultado = "OK", Mensagem = "Agendamento realizado" };
@@ -62,6 +63,7 @@ namespace ClinicaApiCore.Services.Imp
 
             objAgendas.ID_PACIENTE_LONG = null;
             objAgendas.ID_STATUS_INT = 0;
+            objAgendas.DATA_AGENDAMENTO_DTI = null;
             _repository.Update(objAgendas);
 
             return new AgendamentodResponse() { Resultado = "OK", Mensagem = "Agendamento cancelado" };

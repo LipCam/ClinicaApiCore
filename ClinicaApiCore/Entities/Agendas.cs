@@ -26,5 +26,6 @@ namespace ClinicaApiCore.Entities
         public long ID_PROCEDIMENTO_LONG { get; set; }
         [ForeignKey("ID_PROCEDIMENTO_LONG")]
         public Procedimentos Procedimentos { get; set; }
+        public DateTime? DATA_AGENDAMENTO_DTI { get; set; }
     }
 }
