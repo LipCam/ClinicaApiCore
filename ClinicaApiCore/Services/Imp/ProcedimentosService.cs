@@ -22,7 +22,7 @@ namespace ClinicaApiCore.Services.Imp
             });
         }
 
-        public RequestProcedimentoResultDTO Edit(long Id, AddEditProcedimentoRequestDTO addEditProcedimentosRequestDTO)
+        public ProcedimentosResponseDTO Edit(long Id, AddEditProcedimentoRequestDTO addEditProcedimentosRequestDTO)
         {
             Procedimentos entity = _repository.GetById(Id);
             if (entity != null)
@@ -31,22 +31,22 @@ namespace ClinicaApiCore.Services.Imp
                 entity.VALOR_DEC = addEditProcedimentosRequestDTO.Valor != null ? addEditProcedimentosRequestDTO.Valor.Value : 0;
                 _repository.Edit(entity);
 
-                return new RequestProcedimentoResultDTO() { Result = "OK", Message = "Edição realizada com sucesso" };
+                return new ProcedimentosResponseDTO() { Result = "OK", Message = "Edição realizada com sucesso" };
             }
 
-            return new RequestProcedimentoResultDTO() { Result = "ERRO", Message = "Registro inexistente" };
+            return new ProcedimentosResponseDTO() { Result = "ERRO", Message = "Registro inexistente" };
         }
 
-        public RequestProcedimentoResultDTO Delete(long Id)
+        public ProcedimentosResponseDTO Delete(long Id)
         {
             Procedimentos entity = _repository.GetById(Id);
             if (entity != null)
             {
                 _repository.Delete(entity);
-                return new RequestProcedimentoResultDTO() { Result = "OK", Message = "Exclusão realizada com sucesso" };
+                return new ProcedimentosResponseDTO() { Result = "OK", Message = "Exclusão realizada com sucesso" };
             }
 
-            return new RequestProcedimentoResultDTO() { Result = "ERRO", Message = "Registro inexistente" };
+            return new ProcedimentosResponseDTO() { Result = "ERRO", Message = "Registro inexistente" };
         }
 
         public List<ProcedimentosDTO> GetAll()

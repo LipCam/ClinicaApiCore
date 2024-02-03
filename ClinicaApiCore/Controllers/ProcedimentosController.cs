@@ -29,7 +29,7 @@ namespace ClinicaApiCore.Controllers
             if (ProcedimentosDTO != null)
                 return Ok(ProcedimentosDTO);
             
-            return BadRequest(new RequestProcedimentoResultDTO() { Result = "Erro", Message = "Registro não encontrado" });
+            return BadRequest(new ProcedimentosResponseDTO() { Result = "Erro", Message = "Registro não encontrado" });
         }
 
         [HttpPost]
@@ -50,7 +50,7 @@ namespace ClinicaApiCore.Controllers
             if (addEditProcedimentoRequestDTO.Descricao == "")
                 return BadRequest(new { Result = "Erro", Message = "Campo Descricao deve ser preenchido" });
 
-            RequestProcedimentoResultDTO requestProcedimentoResultDTO = _service.Edit(Id, addEditProcedimentoRequestDTO);
+            ProcedimentosResponseDTO requestProcedimentoResultDTO = _service.Edit(Id, addEditProcedimentoRequestDTO);
 
             if (requestProcedimentoResultDTO.Result == "OK")
                 return Ok(requestProcedimentoResultDTO);
@@ -62,7 +62,7 @@ namespace ClinicaApiCore.Controllers
         [Route("{Id}")]
         public IActionResult deleteProcedimento(long Id)
         {
-            RequestProcedimentoResultDTO requestProcedimentoResultDTO = _service.Delete(Id);
+            ProcedimentosResponseDTO requestProcedimentoResultDTO = _service.Delete(Id);
 
             if(requestProcedimentoResultDTO.Result == "OK")
                 return Ok(requestProcedimentoResultDTO);
