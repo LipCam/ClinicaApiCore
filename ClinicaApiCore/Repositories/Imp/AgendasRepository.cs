@@ -33,8 +33,9 @@ namespace ClinicaApiCore.Repositories.Imp
                             FROM AGENDAS_TAB AGD WITH(NOLOCK)
                             INNER JOIN MEDICOS_TAB MED WITH(NOLOCK) ON MED.ID_MEDICO_LONG = AGD.ID_MEDICO_LONG
                             INNER JOIN PROCEDIMENTOS_TAB PRC WITH(NOLOCK) ON PRC.ID_PROCEDIMENTO_LONG = AGD.ID_PROCEDIMENTO_LONG
-                            WHERE AGD.DATA_DTI BETWEEN @DATA_INICIO_DTI AND @DATA_FIM_DTI AND (@ID_PROCEDIMENTO_LONG = 0 OR AGD.ID_PROCEDIMENTO_LONG = @ID_PROCEDIMENTO_LONG)
-                            AND (@ID_MEDICO_LONG = 0 OR AGD.ID_MEDICO_LONG = @ID_MEDICO_LONG)";
+                            WHERE AGD.ID_STATUS_INT = 0 AND AGD.DATA_DTI BETWEEN @DATA_INICIO_DTI AND @DATA_FIM_DTI 
+                                AND (@ID_PROCEDIMENTO_LONG = 0 OR AGD.ID_PROCEDIMENTO_LONG = @ID_PROCEDIMENTO_LONG)
+                                AND (@ID_MEDICO_LONG = 0 OR AGD.ID_MEDICO_LONG = @ID_MEDICO_LONG)";
 
             object[] lstParamItems = new object[]
             {                
