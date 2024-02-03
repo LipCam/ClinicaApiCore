@@ -56,7 +56,7 @@ namespace ClinicaApiCore.Controllers
             if (addEditPacienteRequestDTO.CPF == "")
                 return BadRequest(new { Result = "Erro", Message = "Campo CPF deve ser preenchido" });
 
-            RequestPacienteResultDTO requestPacienteResultDTO = _service.Edit(Id, addEditPacienteRequestDTO);
+            PacientesResponseDTO requestPacienteResultDTO = _service.Edit(Id, addEditPacienteRequestDTO);
 
             if (requestPacienteResultDTO.Result == "OK")
                 return Ok(requestPacienteResultDTO);
@@ -68,7 +68,7 @@ namespace ClinicaApiCore.Controllers
         [Route("deletePaciente/{Id}")]
         public IActionResult deletePaciente(long Id)
         {
-            RequestPacienteResultDTO requestPacienteResultDTO = _service.Delete(Id);
+            PacientesResponseDTO requestPacienteResultDTO = _service.Delete(Id);
 
             if(requestPacienteResultDTO.Result == "OK")
                 return Ok(requestPacienteResultDTO);

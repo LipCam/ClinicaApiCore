@@ -23,7 +23,7 @@ namespace ClinicaApiCore.Services.Imp
             });
         }
 
-        public RequestPacienteResultDTO Edit(long Id, AddEditPacienteRequestDTO addEditEditPacienteRequestDTO)
+        public PacientesResponseDTO Edit(long Id, AddEditPacienteRequestDTO addEditEditPacienteRequestDTO)
         {
             Pacientes entity = _repository.GetById(Id);
             if (entity != null)
@@ -33,22 +33,22 @@ namespace ClinicaApiCore.Services.Imp
                 entity.CELULAR_STR = addEditEditPacienteRequestDTO.Celular;
                 _repository.Edit(entity);
 
-                return new RequestPacienteResultDTO() { Result = "OK", Message = "Edição realizada com sucesso" };
+                return new PacientesResponseDTO() { Result = "OK", Message = "Edição realizada com sucesso" };
             }
 
-            return new RequestPacienteResultDTO() { Result = "ERRO", Message = "Registro inexistente" };
+            return new PacientesResponseDTO() { Result = "ERRO", Message = "Registro inexistente" };
         }
 
-        public RequestPacienteResultDTO Delete(long Id)
+        public PacientesResponseDTO Delete(long Id)
         {
             Pacientes entity = _repository.GetById(Id);
             if (entity != null)
             {
                 _repository.Delete(entity);
-                return new RequestPacienteResultDTO() { Result = "OK", Message = "Exclusão realizada com sucesso" };
+                return new PacientesResponseDTO() { Result = "OK", Message = "Exclusão realizada com sucesso" };
             }
 
-            return new RequestPacienteResultDTO() { Result = "ERRO", Message = "Registro inexistente" };
+            return new PacientesResponseDTO() { Result = "ERRO", Message = "Registro inexistente" };
         }
 
         public List<PacientesDTO> GetAll()
