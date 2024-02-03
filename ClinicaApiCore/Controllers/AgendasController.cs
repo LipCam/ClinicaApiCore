@@ -32,16 +32,16 @@ namespace ClinicaApiCore.Controllers
         }
 
         [HttpPost]
-        public IActionResult RealizarAgendamento([FromBody] RealizarAgdRequest realizarAgdRequest)
+        public IActionResult RealizarAgendamento([FromBody] RealizarAgendaRequestDTO realizarAgdRequest)
         {  
             if (realizarAgdRequest.IdAgenda == 0)
-                return BadRequest(new AgendamentodResponse() { Resultado = "ERRO", Mensagem = "Campo IdAgenda deve ser preenchido" });
+                return BadRequest(new AgendasResponseDTO() { Result = "ERRO", Message = "Campo IdAgenda deve ser preenchido" });
 
             if (realizarAgdRequest.IdPaciente == 0)
-                return BadRequest(new AgendamentodResponse() { Resultado = "ERRO", Mensagem = "Campo IdPaciente deve ser preenchido" });
+                return BadRequest(new AgendasResponseDTO() { Result = "ERRO", Message = "Campo IdPaciente deve ser preenchido" });
 
-            AgendamentodResponse objAgendamentodResponse = _service.RealizarAgendamento(realizarAgdRequest.IdAgenda, realizarAgdRequest.IdPaciente);
-            if (objAgendamentodResponse.Resultado == "OK")
+            AgendasResponseDTO objAgendamentodResponse = _service.RealizarAgendamento(realizarAgdRequest.IdAgenda, realizarAgdRequest.IdPaciente);
+            if (objAgendamentodResponse.Result == "OK")
                 return Ok(objAgendamentodResponse);
             else
                 return BadRequest(objAgendamentodResponse);
@@ -52,10 +52,10 @@ namespace ClinicaApiCore.Controllers
         public IActionResult CancelarAgendamento(long IdAgenda)
         {
             if (IdAgenda == 0)
-                return BadRequest(new AgendamentodResponse() { Resultado = "ERRO", Mensagem = "Campo IdAgenda deve ser preenchido" });
+                return BadRequest(new AgendasResponseDTO() { Result = "ERRO", Message = "Campo IdAgenda deve ser preenchido" });
 
-            AgendamentodResponse objAgendamentodResponse = _service.CancelarAgendamento(IdAgenda);
-            if (objAgendamentodResponse.Resultado == "OK")
+            AgendasResponseDTO objAgendamentodResponse = _service.CancelarAgendamento(IdAgenda);
+            if (objAgendamentodResponse.Result == "OK")
                 return Ok(objAgendamentodResponse);
             else
                 return BadRequest(objAgendamentodResponse);

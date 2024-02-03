@@ -6,7 +6,7 @@ namespace ClinicaApiCore.Services
     {
         List<AgendasDTO> GetByLivres(string DataInicio, string HoraInicio, string DataFim, string HoraFim, long IdProcedimento, long IdMedico);
         List<AgendasDTO> GetByPaciente(long IdPaciente);
-        AgendamentodResponse RealizarAgendamento(long IdAgenda, long IdPaciente);
-        AgendamentodResponse CancelarAgendamento(long IdAgenda);
+        AgendasResponseDTO RealizarAgendamento(long IdAgenda, long IdPaciente);
+        AgendasResponseDTO CancelarAgendamento(long IdAgenda);
     }
 }
