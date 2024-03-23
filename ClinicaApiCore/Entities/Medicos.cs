@@ -3,11 +3,13 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ClinicaApiCore.Entities
 {
-    [Table("MEDICOS_TAB")]
+    [Table("CAD_USUARIOS_TAB")]
     public class Medicos
     {
         [Key]
-        public long ID_MEDICO_LONG { get; set; }
+        public long ID_USUARIO_LONG { get; set; }
+
+        public int ID_EMPRESA_INT { get; set; }
 
         [MaxLength(150)]
         public string NOME_STR { get; set; }

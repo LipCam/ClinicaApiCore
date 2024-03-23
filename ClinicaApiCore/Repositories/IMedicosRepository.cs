@@ -5,8 +5,8 @@ namespace ClinicaApiCore.Repositories
 {
     public interface IMedicosRepository
     {
-        List<MedicosDTO> GetAll();
-        Medicos GetById(long Id);
+        List<MedicosDTO> GetAll(int IdEmpresa);
+        Medicos GetById(int IdEmpresa, long Id);
         MedicosDTO Add(Medicos entity);
         void Edit(Medicos entity);
         void Delete(Medicos entity);

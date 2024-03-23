@@ -16,16 +16,17 @@ namespace ClinicaApiCore.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAll()
+        [Route("{IdEmpresa}")]
+        public IActionResult GetAll(int IdEmpresa)
         {
-            return Ok(_service.GetAll());
+            return Ok(_service.GetAll(IdEmpresa));
         }
 
         [HttpGet]
-        [Route("{Id}")]
-        public IActionResult GetById(long Id)
+        [Route("{IdEmpresa}/{Id}")]
+        public IActionResult GetById(int IdEmpresa, long Id)
         {
-            PacientesDTO PacientesDTO = _service.GetById(Id);
+            PacientesDTO PacientesDTO = _service.GetById(IdEmpresa, Id);
             if (PacientesDTO != null)
                 return Ok(PacientesDTO);
             
@@ -33,7 +34,8 @@ namespace ClinicaApiCore.Controllers
         }
 
         [HttpPost]
-        public IActionResult addPaciente([FromBody] AddEditPacienteRequestDTO addPacienteRequestDTO)
+        [Route("{IdEmpresa}")]
+        public IActionResult addPaciente(int IdEmpresa, [FromBody] AddEditPacienteRequestDTO addPacienteRequestDTO)
         {
             if (addPacienteRequestDTO.Nome == "")
                 return BadRequest(new { Result = "Erro", Message = "Campo Nome deve ser preenchido" });
@@ -41,14 +43,14 @@ namespace ClinicaApiCore.Controllers
             if (addPacienteRequestDTO.CPF == "")
                 return BadRequest(new { Result = "Erro", Message = "Campo CPF deve ser preenchido" });
 
-            PacientesDTO PacientesDTO = _service.Add(addPacienteRequestDTO);
+            PacientesDTO PacientesDTO = _service.Add(IdEmpresa, addPacienteRequestDTO);
             
             return Ok(PacientesDTO);
         }
 
         [HttpPut]
-        [Route("{Id}")]
-        public IActionResult editPaciente(long Id, [FromBody] AddEditPacienteRequestDTO addEditPacienteRequestDTO)
+        [Route("{IdEmpresa}/{Id}")]
+        public IActionResult editPaciente(int IdEmpresa, long Id, [FromBody] AddEditPacienteRequestDTO addEditPacienteRequestDTO)
         {
             if (addEditPacienteRequestDTO.Nome == "")
                 return BadRequest(new { Result = "Erro", Message = "Campo Nome deve ser preenchido" });
@@ -56,7 +58,7 @@ namespace ClinicaApiCore.Controllers
             if (addEditPacienteRequestDTO.CPF == "")
                 return BadRequest(new { Result = "Erro", Message = "Campo CPF deve ser preenchido" });
 
-            PacientesResponseDTO requestPacienteResultDTO = _service.Edit(Id, addEditPacienteRequestDTO);
+            PacientesResponseDTO requestPacienteResultDTO = _service.Edit(IdEmpresa, Id, addEditPacienteRequestDTO);
 
             if (requestPacienteResultDTO.Result == "OK")
                 return Ok(requestPacienteResultDTO);
@@ -65,10 +67,10 @@ namespace ClinicaApiCore.Controllers
         }
 
         [HttpDelete]
-        [Route("deletePaciente/{Id}")]
-        public IActionResult deletePaciente(long Id)
+        [Route("{IdEmpresa}/{Id}")]
+        public IActionResult deletePaciente(int IdEmpresa, long Id)
         {
-            PacientesResponseDTO requestPacienteResultDTO = _service.Delete(Id);
+            PacientesResponseDTO requestPacienteResultDTO = _service.Delete(IdEmpresa, Id);
 
             if(requestPacienteResultDTO.Result == "OK")
                 return Ok(requestPacienteResultDTO);

@@ -16,20 +16,26 @@ namespace ClinicaApiCore.Services.Imp
             _pacientesRepository = pacientesRepository;
         }
 
-        public List<AgendasDTO> GetByLivres(string DataInicio, string HoraInicio, string DataFim, string HoraFim, long IdProcedimento, long IdMedico)
+        public List<AgendasDTO> GetByLivres(int IdEmpresa, string DataInicio, string HoraInicio, string DataFim, string HoraFim, long IdProcedimento, long IdMedico)
         {
-            DateTime DtInicio = DateTime.Now;
+            DateTime DtInicio;
             DateTime.TryParseExact(DataInicio.Trim() + " " + HoraInicio.Trim(), "dd/MM/yyyy HH:mm", new CultureInfo("pt-BR"), DateTimeStyles.None, out DtInicio);
 
-            DateTime DtFim = DateTime.Now;
+            if(DtInicio == DateTime.MinValue)
+                DtInicio = DateTime.Now;
+
+            DateTime DtFim;
             DateTime.TryParseExact(DataFim.Trim() + " " + HoraFim.Trim(), "dd/MM/yyyy HH:mm", new CultureInfo("pt-BR"), DateTimeStyles.None, out DtFim);
 
-            return _repository.GetByLivres(DtInicio, DtFim, IdProcedimento, IdMedico);
+            if (DtFim == DateTime.MinValue)
+                DtFim = DateTime.Now;
+
+            return _repository.GetByLivres(IdEmpresa, DtInicio, DtFim, IdProcedimento, IdMedico);
         }
 
-        public List<AgendasDTO> GetByPaciente(long IdPaciente)
+        public List<AgendasDTO> GetByPaciente(int IdEmpresa, long IdPaciente)
         {
-            return _repository.GetByPaciente(IdPaciente);
+            return _repository.GetByPaciente(IdEmpresa, IdPaciente);
         }
 
         public AgendasResponseDTO RealizarAgendamento(long IdAgenda, long IdPaciente)
@@ -38,7 +44,7 @@ namespace ClinicaApiCore.Services.Imp
             if (objAgendas == null)
                 return new AgendasResponseDTO() { Result = "ERRO", Message = "Agendamento inexente" };
 
-            if(_pacientesRepository.GetById(IdPaciente) == null)
+            if(_pacientesRepository.GetById(objAgendas.ID_EMPRESA_INT, IdPaciente) == null)
                 return new AgendasResponseDTO() { Result = "ERRO", Message = "Paciente inexente" };
 
             if (objAgendas.ID_PACIENTE_LONG != null)

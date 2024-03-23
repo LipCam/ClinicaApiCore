@@ -3,6 +3,7 @@
     public class ProcedimentosDTO
     {
         public long IdProcedimento { get; set; }
+        public string? Codigo { get; set; }
         public string? Descricao { get; set; }
         public decimal? Valor { get; set; }
     }

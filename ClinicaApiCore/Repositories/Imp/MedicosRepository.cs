@@ -18,7 +18,7 @@ namespace ClinicaApiCore.Repositories.Imp
             _appDbContext.Medicos.Add(entity);
             _appDbContext.SaveChanges();
 
-            return new MedicosDTO() { IdMedico = entity.ID_MEDICO_LONG, Nome = entity.NOME_STR, NumRegistro = entity.NUM_REGISTRO_STR };
+            return new MedicosDTO() { IdMedico = entity.ID_USUARIO_LONG, Nome = entity.NOME_STR, NumRegistro = entity.NUM_REGISTRO_STR };
         }
 
         public void Edit(Medicos entity)
@@ -33,19 +33,19 @@ namespace ClinicaApiCore.Repositories.Imp
             _appDbContext.SaveChanges();
         }        
 
-        public List<MedicosDTO> GetAll()
+        public List<MedicosDTO> GetAll(int IdEmpresa)
         {
-            return _appDbContext.Medicos.Select(p=> 
+            return _appDbContext.Medicos.Where(p=> p.ID_EMPRESA_INT == IdEmpresa).Select(p=> 
                 new MedicosDTO() { 
-                    IdMedico = p.ID_MEDICO_LONG,
+                    IdMedico = p.ID_USUARIO_LONG,
                     Nome = p.NOME_STR,
                     NumRegistro = p.NUM_REGISTRO_STR
             }).ToList();
         }
 
-        public Medicos GetById(long Id)
+        public Medicos GetById(int IdEmpresa, long Id)
         {
-            return _appDbContext.Medicos.FirstOrDefault(p => p.ID_MEDICO_LONG == Id);            
+            return _appDbContext.Medicos.FirstOrDefault(p => p.ID_EMPRESA_INT == IdEmpresa && p.ID_USUARIO_LONG == Id);            
         }
     }
 }

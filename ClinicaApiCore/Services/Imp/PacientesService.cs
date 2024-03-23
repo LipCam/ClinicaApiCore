@@ -13,21 +13,23 @@ namespace ClinicaApiCore.Services.Imp
             _repository = repository;
         }
 
-        public PacientesDTO Add(AddEditPacienteRequestDTO addEditPacienteRequestDTO)
+        public PacientesDTO Add(int IdEmpresa, AddEditPacienteRequestDTO addEditPacienteRequestDTO)
         {
             return _repository.Add(new Pacientes()
             {
+                ID_EMPRESA_INT = IdEmpresa,
                 NOME_STR = addEditPacienteRequestDTO.Nome,
                 CPF_STR = addEditPacienteRequestDTO.CPF,
                 CELULAR_STR = addEditPacienteRequestDTO.Celular,
             });
         }
 
-        public PacientesResponseDTO Edit(long Id, AddEditPacienteRequestDTO addEditEditPacienteRequestDTO)
+        public PacientesResponseDTO Edit(int IdEmpresa, long Id, AddEditPacienteRequestDTO addEditEditPacienteRequestDTO)
         {
-            Pacientes entity = _repository.GetById(Id);
+            Pacientes entity = _repository.GetById(IdEmpresa, Id);
             if (entity != null)
             {
+                entity.ID_EMPRESA_INT = IdEmpresa;
                 entity.NOME_STR = addEditEditPacienteRequestDTO.Nome;
                 entity.CPF_STR = addEditEditPacienteRequestDTO.CPF;
                 entity.CELULAR_STR = addEditEditPacienteRequestDTO.Celular;
@@ -39,9 +41,9 @@ namespace ClinicaApiCore.Services.Imp
             return new PacientesResponseDTO() { Result = "ERRO", Message = "Registro inexistente" };
         }
 
-        public PacientesResponseDTO Delete(long Id)
+        public PacientesResponseDTO Delete(int IdEmpresa, long Id)
         {
-            Pacientes entity = _repository.GetById(Id);
+            Pacientes entity = _repository.GetById(IdEmpresa, Id);
             if (entity != null)
             {
                 _repository.Delete(entity);
@@ -51,14 +53,14 @@ namespace ClinicaApiCore.Services.Imp
             return new PacientesResponseDTO() { Result = "ERRO", Message = "Registro inexistente" };
         }
 
-        public List<PacientesDTO> GetAll()
+        public List<PacientesDTO> GetAll(int IdEmpresa)
         {
-            return _repository.GetAll();
+            return _repository.GetAll(IdEmpresa);
         }
 
-        public PacientesDTO GetById(long Id)
+        public PacientesDTO GetById(int IdEmpresa, long Id)
         {
-            Pacientes pacientes = _repository.GetById(Id);
+            Pacientes pacientes = _repository.GetById(IdEmpresa, Id);
             if (pacientes != null)
                 return new PacientesDTO()
                 {

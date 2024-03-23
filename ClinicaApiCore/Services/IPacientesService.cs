@@ -4,10 +4,10 @@ namespace ClinicaApiCore.Services
 {
     public interface IPacientesService
     {
-        List<PacientesDTO> GetAll();
-        PacientesDTO GetById(long Id);
-        PacientesDTO Add(AddEditPacienteRequestDTO addPacienteRequestDTO);
-        PacientesResponseDTO Edit(long Id, AddEditPacienteRequestDTO addEditPacienteRequestDTO);
-        PacientesResponseDTO Delete(long Id);
+        List<PacientesDTO> GetAll(int IdEmpresa);
+        PacientesDTO GetById(int IdEmpresa, long Id);
+        PacientesDTO Add(int IdEmpresa, AddEditPacienteRequestDTO addPacienteRequestDTO);
+        PacientesResponseDTO Edit(int IdEmpresa, long Id, AddEditPacienteRequestDTO addEditPacienteRequestDTO);
+        PacientesResponseDTO Delete(int IdEmpresa, long Id);
     }
 }

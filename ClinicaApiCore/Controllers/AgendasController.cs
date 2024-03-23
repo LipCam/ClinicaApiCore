@@ -16,18 +16,18 @@ namespace ClinicaApiCore.Controllers
         }
 
         [HttpGet]
-        [Route("Disponiveis")]
-        public IActionResult GetByLivres(string DataInicio = "", string HoraInicio = "", string DataFim = "", string HoraFim = "", long IdProcedimento = 0, long IdMedico = 0)
+        [Route("Disponiveis/{IdEmpresa}")]
+        public IActionResult GetByLivres(int IdEmpresa, string DataInicio = "", string HoraInicio = "", string DataFim = "", string HoraFim = "", long IdProcedimento = 0, long IdMedico = 0)
         {
-            List<AgendasDTO> lstAgendasDTO = _service.GetByLivres(DataInicio, HoraInicio, DataFim, HoraFim, IdProcedimento, IdMedico);
+            List<AgendasDTO> lstAgendasDTO = _service.GetByLivres(IdEmpresa, DataInicio, HoraInicio, DataFim, HoraFim, IdProcedimento, IdMedico);
             return Ok(lstAgendasDTO);
         }
 
         [HttpGet]
-        [Route("Paciente/{IdPaciente}")]
-        public IActionResult GetById(long IdPaciente)
+        [Route("Paciente/{IdEmpresa}/{IdPaciente}")]
+        public IActionResult GetById(int IdEmpresa, long IdPaciente)
         {
-            List<AgendasDTO> lstAgendasDTO = _service.GetByPaciente(IdPaciente);
+            List<AgendasDTO> lstAgendasDTO = _service.GetByPaciente(IdEmpresa, IdPaciente);
             return Ok(lstAgendasDTO);
         }
 
