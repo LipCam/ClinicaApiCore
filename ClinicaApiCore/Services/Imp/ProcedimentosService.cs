@@ -1,6 +1,8 @@
-﻿using ClinicaApiCore.DTOs.Procedimentos;
+﻿using ClinicaApiCore.DTOs;
+using ClinicaApiCore.DTOs.Procedimentos;
 using ClinicaApiCore.Entities;
 using ClinicaApiCore.Repositories;
+using System.Net;
 
 namespace ClinicaApiCore.Services.Imp
 {
@@ -22,7 +24,7 @@ namespace ClinicaApiCore.Services.Imp
             });
         }
 
-        public ProcedimentosResponseDTO Edit(long Id, AddEditProcedimentoRequestDTO addEditProcedimentosRequestDTO)
+        public ResponseDTO Edit(long Id, AddEditProcedimentoRequestDTO addEditProcedimentosRequestDTO)
         {
             Procedimentos entity = _repository.GetById(Id);
             if (entity != null)
@@ -31,22 +33,22 @@ namespace ClinicaApiCore.Services.Imp
                 entity.VALOR_DEC = addEditProcedimentosRequestDTO.Valor != null ? addEditProcedimentosRequestDTO.Valor.Value : 0;
                 _repository.Edit(entity);
 
-                return new ProcedimentosResponseDTO() { Result = "OK", Message = "Edição realizada com sucesso" };
+                return new ResponseDTO() { StatusCode = HttpStatusCode.OK, Message = "Edição realizada com sucesso" };
             }
 
-            return new ProcedimentosResponseDTO() { Result = "ERRO", Message = "Registro inexistente" };
+            return new ResponseDTO() { StatusCode = HttpStatusCode.NotFound, Message = "Registro inexistente" };
         }
 
-        public ProcedimentosResponseDTO Delete(long Id)
+        public ResponseDTO Delete(long Id)
         {
             Procedimentos entity = _repository.GetById(Id);
             if (entity != null)
             {
                 _repository.Delete(entity);
-                return new ProcedimentosResponseDTO() { Result = "OK", Message = "Exclusão realizada com sucesso" };
+                return new ResponseDTO() { StatusCode = HttpStatusCode.OK, Message = "Exclusão realizada com sucesso" };
             }
 
-            return new ProcedimentosResponseDTO() { Result = "ERRO", Message = "Registro inexistente" };
+            return new ResponseDTO() { StatusCode = HttpStatusCode.NotFound, Message = "Registro inexistente" };
         }
 
         public List<ProcedimentosDTO> GetAll()

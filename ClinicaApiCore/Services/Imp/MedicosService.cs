@@ -1,6 +1,8 @@
-﻿using ClinicaApiCore.DTOs.Medicos;
+﻿using ClinicaApiCore.DTOs;
+using ClinicaApiCore.DTOs.Medicos;
 using ClinicaApiCore.Entities;
 using ClinicaApiCore.Repositories;
+using System.Net;
 
 namespace ClinicaApiCore.Services.Imp
 {
@@ -23,7 +25,7 @@ namespace ClinicaApiCore.Services.Imp
             });
         }
 
-        public MedicosResponseDTO Edit(long Id, AddEditMedicoRequestDTO addEditEditMedicoRequestDTO)
+        public ResponseDTO Edit(long Id, AddEditMedicoRequestDTO addEditEditMedicoRequestDTO)
         {
             Medicos entity = _repository.GetById(Id);
             if (entity != null)
@@ -33,22 +35,22 @@ namespace ClinicaApiCore.Services.Imp
                 entity.NUM_REGISTRO_STR = addEditEditMedicoRequestDTO.NumRegistro;
                 _repository.Edit(entity);
 
-                return new MedicosResponseDTO() { Result = "OK", Message = "Edição realizada com sucesso" };
+                return new ResponseDTO() { StatusCode = HttpStatusCode.OK, Message = "Edição realizada com sucesso" };
             }
 
-            return new MedicosResponseDTO() { Result = "ERRO", Message = "Registro inexistente" };
+            return new ResponseDTO() { StatusCode = HttpStatusCode.NotFound, Message = "Registro inexistente" };
         }
 
-        public MedicosResponseDTO Delete(long Id)
+        public ResponseDTO Delete(long Id)
         {
             Medicos entity = _repository.GetById(Id);
             if (entity != null)
             {
                 _repository.Delete(entity);
-                return new MedicosResponseDTO() { Result = "OK", Message = "Exclusão realizada com sucesso" };
+                return new ResponseDTO() { StatusCode = HttpStatusCode.OK, Message = "Exclusão realizada com sucesso" };
             }
 
-            return new MedicosResponseDTO() { Result = "ERRO", Message = "Registro inexistente" };
+            return new ResponseDTO() { StatusCode = HttpStatusCode.NotFound, Message = "Registro inexistente" };
         }
 
         public List<MedicosDTO> GetAll()

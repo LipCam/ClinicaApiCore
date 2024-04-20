@@ -1,4 +1,5 @@
-﻿using ClinicaApiCore.DTOs.Medicos;
+﻿using ClinicaApiCore.DTOs;
+using ClinicaApiCore.DTOs.Medicos;
 
 namespace ClinicaApiCore.Services
 {
@@ -7,7 +8,7 @@ namespace ClinicaApiCore.Services
         List<MedicosDTO> GetAll();
         MedicosDTO GetById(long Id);
         MedicosDTO Add(AddEditMedicoRequestDTO addMedicoRequestDTO);
-        MedicosResponseDTO Edit(long Id, AddEditMedicoRequestDTO addEditMedicoRequestDTO);
-        MedicosResponseDTO Delete(long Id);
+        ResponseDTO Edit(long Id, AddEditMedicoRequestDTO addEditMedicoRequestDTO);
+        ResponseDTO Delete(long Id);
     }
 }

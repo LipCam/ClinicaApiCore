@@ -1,4 +1,5 @@
-﻿using ClinicaApiCore.DTOs.Procedimentos;
+﻿using ClinicaApiCore.DTOs;
+using ClinicaApiCore.DTOs.Procedimentos;
 
 namespace ClinicaApiCore.Services
 {
@@ -7,7 +8,7 @@ namespace ClinicaApiCore.Services
         List<ProcedimentosDTO> GetAll();
         ProcedimentosDTO GetById(long Id);
         ProcedimentosDTO Add(AddEditProcedimentoRequestDTO addProcedimentoRequestDTO);
-        ProcedimentosResponseDTO Edit(long Id, AddEditProcedimentoRequestDTO addProcedimentoRequestDTO);
-        ProcedimentosResponseDTO Delete(long Id);
+        ResponseDTO Edit(long Id, AddEditProcedimentoRequestDTO addProcedimentoRequestDTO);
+        ResponseDTO Delete(long Id);
     }
 }

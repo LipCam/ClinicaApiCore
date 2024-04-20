@@ -1,6 +1,8 @@
-﻿using ClinicaApiCore.DTOs.Pacientes;
+﻿using ClinicaApiCore.DTOs;
+using ClinicaApiCore.DTOs.Pacientes;
 using ClinicaApiCore.Entities;
 using ClinicaApiCore.Repositories;
+using System.Net;
 
 namespace ClinicaApiCore.Services.Imp
 {
@@ -23,7 +25,7 @@ namespace ClinicaApiCore.Services.Imp
             });
         }
 
-        public PacientesResponseDTO Edit(long Id, AddEditPacienteRequestDTO addEditEditPacienteRequestDTO)
+        public ResponseDTO Edit(long Id, AddEditPacienteRequestDTO addEditEditPacienteRequestDTO)
         {
             Pacientes entity = _repository.GetById(Id);
             if (entity != null)
@@ -33,22 +35,22 @@ namespace ClinicaApiCore.Services.Imp
                 entity.CELULAR_STR = addEditEditPacienteRequestDTO.Celular;
                 _repository.Edit(entity);
 
-                return new PacientesResponseDTO() { Result = "OK", Message = "Edição realizada com sucesso" };
+                return new ResponseDTO() { StatusCode = HttpStatusCode.OK, Message = "Edição realizada com sucesso" };
             }
 
-            return new PacientesResponseDTO() { Result = "ERRO", Message = "Registro inexistente" };
+            return new ResponseDTO() { StatusCode = HttpStatusCode.NotFound, Message = "Registro inexistente" };
         }
 
-        public PacientesResponseDTO Delete(long Id)
+        public ResponseDTO Delete(long Id)
         {
             Pacientes entity = _repository.GetById(Id);
             if (entity != null)
             {
                 _repository.Delete(entity);
-                return new PacientesResponseDTO() { Result = "OK", Message = "Exclusão realizada com sucesso" };
+                return new ResponseDTO() { StatusCode = HttpStatusCode.OK, Message = "Exclusão realizada com sucesso" };
             }
 
-            return new PacientesResponseDTO() { Result = "ERRO", Message = "Registro inexistente" };
+            return new ResponseDTO() { StatusCode = HttpStatusCode.NotFound, Message = "Registro inexistente" };
         }
 
         public List<PacientesDTO> GetAll()

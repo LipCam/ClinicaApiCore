@@ -1,6 +1,9 @@
-﻿using ClinicaApiCore.DTOs.Agendas;
+﻿using ClinicaApiCore.DTOs;
+using ClinicaApiCore.DTOs.Agendas;
 using ClinicaApiCore.Services;
+using ClinicaApiCore.Utilitarios;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 
 namespace ClinicaApiCore.Controllers
 {
@@ -25,7 +28,7 @@ namespace ClinicaApiCore.Controllers
 
         [HttpGet]
         [Route("Paciente/{IdPaciente}")]
-        public IActionResult GetById(long IdPaciente)
+        public IActionResult GetByPaciente(long IdPaciente)
         {
             List<AgendasDTO> lstAgendasDTO = _service.GetByPaciente(IdPaciente);
             return Ok(lstAgendasDTO);
@@ -35,16 +38,13 @@ namespace ClinicaApiCore.Controllers
         public IActionResult RealizarAgendamento([FromBody] RealizarAgendaRequestDTO realizarAgdRequest)
         {  
             if (realizarAgdRequest.IdAgenda == 0)
-                return BadRequest(new AgendasResponseDTO() { Result = "ERRO", Message = "Campo IdAgenda deve ser preenchido" });
+                return BadRequest(new ResponseDTO() { StatusCode = HttpStatusCode.BadRequest, Message = "Campo IdAgenda deve ser preenchido" });
 
             if (realizarAgdRequest.IdPaciente == 0)
-                return BadRequest(new AgendasResponseDTO() { Result = "ERRO", Message = "Campo IdPaciente deve ser preenchido" });
+                return BadRequest(new ResponseDTO() { StatusCode = HttpStatusCode.BadRequest, Message = "Campo IdPaciente deve ser preenchido" });
 
-            AgendasResponseDTO objAgendamentodResponse = _service.RealizarAgendamento(realizarAgdRequest.IdAgenda, realizarAgdRequest.IdPaciente);
-            if (objAgendamentodResponse.Result == "OK")
-                return Ok(objAgendamentodResponse);
-            else
-                return BadRequest(objAgendamentodResponse);
+            ResponseDTO responseDTO = _service.RealizarAgendamento(realizarAgdRequest.IdAgenda, realizarAgdRequest.IdPaciente);
+            return new ResponseEntity().GetResponseEntity(responseDTO.StatusCode, responseDTO);
         }
 
         [HttpDelete]
@@ -52,13 +52,10 @@ namespace ClinicaApiCore.Controllers
         public IActionResult CancelarAgendamento(long IdAgenda)
         {
             if (IdAgenda == 0)
-                return BadRequest(new AgendasResponseDTO() { Result = "ERRO", Message = "Campo IdAgenda deve ser preenchido" });
+                return BadRequest(new ResponseDTO() { StatusCode = HttpStatusCode.BadRequest, Message = "Campo IdAgenda deve ser preenchido" });
 
-            AgendasResponseDTO objAgendamentodResponse = _service.CancelarAgendamento(IdAgenda);
-            if (objAgendamentodResponse.Result == "OK")
-                return Ok(objAgendamentodResponse);
-            else
-                return BadRequest(objAgendamentodResponse);
+            ResponseDTO responseDTO = _service.CancelarAgendamento(IdAgenda);
+            return new ResponseEntity().GetResponseEntity(responseDTO.StatusCode, responseDTO);
         }
     }
 }

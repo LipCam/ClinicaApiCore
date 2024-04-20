@@ -1,7 +1,9 @@
-﻿using ClinicaApiCore.DTOs.Agendas;
+﻿using ClinicaApiCore.DTOs;
+using ClinicaApiCore.DTOs.Agendas;
 using ClinicaApiCore.Entities;
 using ClinicaApiCore.Repositories;
 using System.Globalization;
+using System.Net;
 
 namespace ClinicaApiCore.Services.Imp
 {
@@ -32,41 +34,41 @@ namespace ClinicaApiCore.Services.Imp
             return _repository.GetByPaciente(IdPaciente);
         }
 
-        public AgendasResponseDTO RealizarAgendamento(long IdAgenda, long IdPaciente)
+        public ResponseDTO RealizarAgendamento(long IdAgenda, long IdPaciente)
         {
             Agendas objAgendas = _repository.GetById(IdAgenda);
             if (objAgendas == null)
-                return new AgendasResponseDTO() { Result = "ERRO", Message = "Agendamento inexente" };
+                return new ResponseDTO() { StatusCode = HttpStatusCode.NotFound, Message = "Agendamento inexente" };
 
             if(_pacientesRepository.GetById(IdPaciente) == null)
-                return new AgendasResponseDTO() { Result = "ERRO", Message = "Paciente inexente" };
+                return new ResponseDTO() { StatusCode = HttpStatusCode.NotFound, Message = "Paciente inexente" };
 
             if (objAgendas.ID_PACIENTE_LONG != null)
-                return new AgendasResponseDTO() { Result = "ERRO", Message = "Agendamento já realizado" };
+                return new ResponseDTO() { StatusCode = HttpStatusCode.BadRequest, Message = "Agendamento já realizado" };
 
             objAgendas.ID_PACIENTE_LONG = IdPaciente;
             objAgendas.ID_STATUS_INT = 1;
             objAgendas.DATA_AGENDAMENTO_DTI = DateTime.Now;
             _repository.Update(objAgendas);
 
-            return new AgendasResponseDTO() { Result = "OK", Message = "Agendamento realizado" };
+            return new ResponseDTO() { StatusCode = HttpStatusCode.OK, Message = "Agendamento realizado" };
         }
 
-        public AgendasResponseDTO CancelarAgendamento(long IdAgenda)
+        public ResponseDTO CancelarAgendamento(long IdAgenda)
         {
             Agendas objAgendas = _repository.GetById(IdAgenda);
             if (objAgendas == null)
-                return new AgendasResponseDTO() { Result = "ERRO", Message = "Agendamento inexente" };
+                return new ResponseDTO() { StatusCode = HttpStatusCode.NotFound, Message = "Agendamento inexente" };
 
             if (objAgendas.ID_PACIENTE_LONG == null)
-                return new AgendasResponseDTO() { Result = "ERRO", Message = "Agendamento já em status livre" };
+                return new ResponseDTO() { StatusCode = HttpStatusCode.OK, Message = "Agendamento já em status livre" };
 
             objAgendas.ID_PACIENTE_LONG = null;
             objAgendas.ID_STATUS_INT = 0;
             objAgendas.DATA_AGENDAMENTO_DTI = null;
             _repository.Update(objAgendas);
 
-            return new AgendasResponseDTO() { Result = "OK", Message = "Agendamento cancelado" };
+            return new ResponseDTO() { StatusCode = HttpStatusCode.OK, Message = "Agendamento cancelado" };
         }
 
         //public AgendasDTO Add(AddEditProcedimentoRequestDTO addEditAgendasRequestDTO)
