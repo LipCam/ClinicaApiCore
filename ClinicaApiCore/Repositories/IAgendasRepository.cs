@@ -6,8 +6,8 @@ namespace ClinicaApiCore.Repositories
     public interface IAgendasRepository
     {
         Agendas GetById(long Id);
-        List<AgendasDTO> GetByLivres(DateTime DataInicio, DateTime DataFim, long IdProcedimento, long IdMedico);
-        List<AgendasDTO> GetByPaciente(long IdPaciente);
+        List<AgendasDTO> GetByLivres(int IdEmpresa, DateTime DataInicio, DateTime DataFim, long IdProcedimento, long IdMedico);
+        List<AgendasDTO> GetByPaciente(int IdEmpresa, long IdPaciente);
         void Update(Agendas entity);
     }
 }

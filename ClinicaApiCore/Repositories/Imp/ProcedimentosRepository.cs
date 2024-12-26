@@ -33,19 +33,20 @@ namespace ClinicaApiCore.Repositories.Imp
             _appDbContext.SaveChanges();
         }        
 
-        public List<ProcedimentosDTO> GetAll()
+        public List<ProcedimentosDTO> GetAll(int IdEmpresa)
         {
-            return _appDbContext.Procedimentos.Select(p=> 
+            return _appDbContext.Procedimentos.Where(p=> p.ID_EMPRESA_INT == IdEmpresa).Select(p=> 
                 new ProcedimentosDTO() { 
                     IdProcedimento = p.ID_PROCEDIMENTO_LONG,
+                    Codigo = p.COD_TUSS_INTER_STR,
                     Descricao = p.DESCRICAO_STR,
                     Valor = p.VALOR_DEC
             }).ToList();
         }
 
-        public Procedimentos GetById(long Id)
+        public Procedimentos GetById(int IdEmpresa, long Id)
         {
-            return _appDbContext.Procedimentos.FirstOrDefault(p => p.ID_PROCEDIMENTO_LONG == Id);            
+            return _appDbContext.Procedimentos.FirstOrDefault(p => p.ID_EMPRESA_INT == IdEmpresa && p.ID_PROCEDIMENTO_LONG == Id);            
         }
     }
 }

@@ -15,62 +15,64 @@ namespace ClinicaApiCore.Services.Imp
             _repository = repository;
         }
 
-        public PacientesDTO Add(AddEditPacienteRequestDTO addEditPacienteRequestDTO)
+        public Result<PacientesDTO> Add(int IdEmpresa, AddEditPacienteRequestDTO addEditPacienteRequestDTO)
         {
-            return _repository.Add(new Pacientes()
+            return Result<PacientesDTO>.Success(_repository.Add(new Pacientes()
             {
+                ID_EMPRESA_INT = IdEmpresa,
                 NOME_STR = addEditPacienteRequestDTO.Nome,
                 CPF_STR = addEditPacienteRequestDTO.CPF,
                 CELULAR_STR = addEditPacienteRequestDTO.Celular,
-            });
+            }));
         }
 
-        public ResponseDTO Edit(long Id, AddEditPacienteRequestDTO addEditEditPacienteRequestDTO)
+        public Result<string> Edit(int IdEmpresa, long Id, AddEditPacienteRequestDTO addEditEditPacienteRequestDTO)
         {
-            Pacientes entity = _repository.GetById(Id);
+            Pacientes entity = _repository.GetById(IdEmpresa, Id);
             if (entity != null)
             {
+                entity.ID_EMPRESA_INT = IdEmpresa;
                 entity.NOME_STR = addEditEditPacienteRequestDTO.Nome;
                 entity.CPF_STR = addEditEditPacienteRequestDTO.CPF;
                 entity.CELULAR_STR = addEditEditPacienteRequestDTO.Celular;
                 _repository.Edit(entity);
 
-                return new ResponseDTO() { StatusCode = HttpStatusCode.OK, Message = "Edição realizada com sucesso" };
+                return Result<string>.Success("Edição realizada com sucesso");
             }
 
-            return new ResponseDTO() { StatusCode = HttpStatusCode.NotFound, Message = "Registro inexistente" };
+            return Result<string>.Failure("Registro inexistente");
         }
 
-        public ResponseDTO Delete(long Id)
+        public Result<string> Delete(int IdEmpresa, long Id)
         {
-            Pacientes entity = _repository.GetById(Id);
+            Pacientes entity = _repository.GetById(IdEmpresa, Id);
             if (entity != null)
             {
                 _repository.Delete(entity);
-                return new ResponseDTO() { StatusCode = HttpStatusCode.OK, Message = "Exclusão realizada com sucesso" };
+                return Result<string>.Success("Exclusão realizada com sucesso");
             }
 
-            return new ResponseDTO() { StatusCode = HttpStatusCode.NotFound, Message = "Registro inexistente" };
+            return Result<string>.Failure("Registro inexistente");
         }
 
-        public List<PacientesDTO> GetAll()
+        public Result<List<PacientesDTO>> GetAll(int IdEmpresa)
         {
-            return _repository.GetAll();
+            return Result<List<PacientesDTO>>.Success(_repository.GetAll(IdEmpresa));
         }
 
-        public PacientesDTO GetById(long Id)
+        public Result<PacientesDTO> GetById(int IdEmpresa, long Id)
         {
-            Pacientes pacientes = _repository.GetById(Id);
+            Pacientes pacientes = _repository.GetById(IdEmpresa, Id);
             if (pacientes != null)
-                return new PacientesDTO()
+                return Result<PacientesDTO>.Success(new PacientesDTO()
                 {
                     IdPaciente = pacientes.ID_PACIENTE_LONG,
                     Nome = pacientes.NOME_STR,
                     CPF = pacientes.CPF_STR,
                     Celular = pacientes.CELULAR_STR
-                };
+                });
 
-            return null;
+            return Result<PacientesDTO>.Failure("Registro inexistente") ;
         }
     }
 }

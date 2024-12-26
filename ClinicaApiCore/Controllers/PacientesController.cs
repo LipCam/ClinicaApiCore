@@ -19,56 +19,66 @@ namespace ClinicaApiCore.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAll()
+        [Route("{IdEmpresa}")]
+        public IActionResult GetAll(int IdEmpresa)
         {
-            return Ok(_service.GetAll());
+            return Ok(_service.GetAll(IdEmpresa));
         }
 
         [HttpGet]
-        [Route("{Id}")]
-        public IActionResult GetById(long Id)
+        [Route("{IdEmpresa}/{Id}")]
+        public IActionResult GetById(int IdEmpresa, long Id)
         {
-            PacientesDTO PacientesDTO = _service.GetById(Id);
-            if (PacientesDTO != null)
-                return Ok(PacientesDTO);
-
-            return NotFound(new ResponseDTO() { StatusCode = HttpStatusCode.NotFound, Message = "Registro não encontrado" });
+            Result<PacientesDTO> result = _service.GetById(IdEmpresa, Id);
+            if (result.IsSuccess)
+                return Ok(result);
+            
+            return NotFound(result);
         }
 
         [HttpPost]
-        public IActionResult addPaciente([FromBody] AddEditPacienteRequestDTO addPacienteRequestDTO)
+        [Route("{IdEmpresa}")]
+        public IActionResult addPaciente(int IdEmpresa, [FromBody] AddEditPacienteRequestDTO addPacienteRequestDTO)
         {
-            if (string.IsNullOrEmpty(addPacienteRequestDTO.Nome))
-                return BadRequest(new ResponseDTO() { StatusCode = HttpStatusCode.BadRequest, Message = "Campo Nome deve ser preenchido" });
+            if (addPacienteRequestDTO.Nome == "")
+                return BadRequest(Result<PacientesDTO>.Failure("Campo Nome deve ser preenchido"));
 
-            if (string.IsNullOrEmpty(addPacienteRequestDTO.CPF))
-                return BadRequest(new ResponseDTO() { StatusCode = HttpStatusCode.BadRequest, Message = "Campo CPF deve ser preenchido" });
+            if (addPacienteRequestDTO.CPF == "")
+                return BadRequest(Result<PacientesDTO>.Failure("Campo CPF deve ser preenchido"));
 
-            PacientesDTO PacientesDTO = _service.Add(addPacienteRequestDTO);
+            Result<PacientesDTO> result = _service.Add(IdEmpresa, addPacienteRequestDTO);
             
-            return Created("", PacientesDTO);
+            return Ok(result);
         }
 
         [HttpPut]
-        [Route("{Id}")]
-        public IActionResult editPaciente(long Id, [FromBody] AddEditPacienteRequestDTO addEditPacienteRequestDTO)
+        [Route("{IdEmpresa}/{Id}")]
+        public IActionResult editPaciente(int IdEmpresa, long Id, [FromBody] AddEditPacienteRequestDTO addEditPacienteRequestDTO)
         {
-            if (string.IsNullOrEmpty(addEditPacienteRequestDTO.Nome))
-                return BadRequest(new ResponseDTO() { StatusCode = HttpStatusCode.BadRequest, Message = "Campo Nome deve ser preenchido" });
+            if (addEditPacienteRequestDTO.Nome == "")
+                return BadRequest(Result<string>.Failure("Campo Nome deve ser preenchido"));
 
-            if (string.IsNullOrEmpty(addEditPacienteRequestDTO.CPF))
-                return BadRequest(new ResponseDTO() { StatusCode = HttpStatusCode.BadRequest, Message = "Campo CPF deve ser preenchido" });
+            if (addEditPacienteRequestDTO.CPF == "")
+                return BadRequest(Result<string>.Failure("Campo CPF deve ser preenchido"));
 
-            ResponseDTO responseDTO = _service.Edit(Id, addEditPacienteRequestDTO);
-            return new ResponseEntity().GetResponseEntity(responseDTO.StatusCode, responseDTO);
+            Result<string> result = _service.Edit(IdEmpresa, Id, addEditPacienteRequestDTO);
+
+            if (result.IsSuccess)
+                return Ok(result);
+
+            return NotFound(result);
         }
 
         [HttpDelete]
-        [Route("deletePaciente/{Id}")]
-        public IActionResult deletePaciente(long Id)
+        [Route("{IdEmpresa}/{Id}")]
+        public IActionResult deletePaciente(int IdEmpresa, long Id)
         {
-            ResponseDTO responseDTO = _service.Delete(Id);
-            return new ResponseEntity().GetResponseEntity(responseDTO.StatusCode, responseDTO);
+            Result<string> result = _service.Delete(IdEmpresa, Id);
+
+            if(result.IsSuccess)
+                return Ok(result);
+
+            return NotFound(result);
         }
     }
 }

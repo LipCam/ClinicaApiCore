@@ -5,8 +5,8 @@ namespace ClinicaApiCore.Repositories
 {
     public interface IProcedimentosRepository
     {
-        List<ProcedimentosDTO> GetAll();
-        Procedimentos GetById(long Id);
+        List<ProcedimentosDTO> GetAll(int IdEmpresa);
+        Procedimentos GetById(int IdEmpresa, long Id);
         ProcedimentosDTO Add(Procedimentos entity);
         void Edit(Procedimentos entity);
         void Delete(Procedimentos entity);

@@ -33,9 +33,9 @@ namespace ClinicaApiCore.Repositories.Imp
             _appDbContext.SaveChanges();
         }        
 
-        public List<PacientesDTO> GetAll()
+        public List<PacientesDTO> GetAll(int IdEmpresa)
         {
-            return _appDbContext.Pacientes.Select(p=> 
+            return _appDbContext.Pacientes.Where(p=> p.ID_EMPRESA_INT == IdEmpresa).Select(p=> 
                 new PacientesDTO() { 
                     IdPaciente = p.ID_PACIENTE_LONG,
                     Nome = p.NOME_STR,
@@ -44,9 +44,9 @@ namespace ClinicaApiCore.Repositories.Imp
             }).ToList();
         }
 
-        public Pacientes GetById(long Id)
+        public Pacientes GetById(int IdEmpresa, long Id)
         {
-            return _appDbContext.Pacientes.FirstOrDefault(p => p.ID_PACIENTE_LONG == Id);            
+            return _appDbContext.Pacientes.FirstOrDefault(p => p.ID_EMPRESA_INT == IdEmpresa && p.ID_PACIENTE_LONG == Id);            
         }
     }
 }

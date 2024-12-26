@@ -19,49 +19,60 @@ namespace ClinicaApiCore.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAll()
+        [Route("{IdEmpresa}")]
+        public IActionResult GetAll(int IdEmpresa)
         {
-            return Ok(_service.GetAll());
+            return Ok(_service.GetAll(IdEmpresa));
         }
 
         [HttpGet]
-        [Route("{Id}")]
-        public IActionResult GetById(long Id)
+        [Route("{IdEmpresa}/{Id}")]
+        public IActionResult GetById(int IdEmpresa, long Id)
         {
-            ProcedimentosDTO ProcedimentosDTO = _service.GetById(Id);
-            if (ProcedimentosDTO != null)
-                return Ok(ProcedimentosDTO);
+            Result<ProcedimentosDTO> result = _service.GetById(IdEmpresa, Id);
+            if (result != null)
+                return Ok(result);
             
-            return NotFound(new ResponseDTO() { StatusCode = HttpStatusCode.NotFound, Message = "Registro não encontrado" });
+            return NotFound(result);
         }
 
         [HttpPost]
-        public IActionResult addProcedimento([FromBody] AddEditProcedimentoRequestDTO addEditProcedimentoRequestDTO)
-        { 
-            if (string.IsNullOrEmpty(addEditProcedimentoRequestDTO.Descricao))
-                return BadRequest(new ResponseDTO() { StatusCode = HttpStatusCode.BadRequest, Message = "Campo Descricao deve ser preenchido" });
+        [Route("{IdEmpresa}")]
+        public IActionResult addProcedimento(int IdEmpresa, [FromBody] AddEditProcedimentoRequestDTO addEditProcedimentoRequestDTO)
+        {
+            if (addEditProcedimentoRequestDTO.Descricao == "")
+                return BadRequest(Result<ProcedimentosDTO>.Failure("Campo Descricao deve ser preenchido"));
 
-            ProcedimentosDTO ProcedimentosDTO = _service.Add(addEditProcedimentoRequestDTO);            
-            return Created("", ProcedimentosDTO);
+            Result<ProcedimentosDTO> result = _service.Add(IdEmpresa, addEditProcedimentoRequestDTO);
+            
+            return Ok(result);
         }
 
         [HttpPut]
-        [Route("{Id}")]
-        public IActionResult editProcedimento(long Id, [FromBody] AddEditProcedimentoRequestDTO addEditProcedimentoRequestDTO)
+        [Route("{IdEmpresa}/{Id}")]
+        public IActionResult editProcedimento(int IdEmpresa, long Id, [FromBody] AddEditProcedimentoRequestDTO addEditProcedimentoRequestDTO)
         {
-            if (string.IsNullOrEmpty(addEditProcedimentoRequestDTO.Descricao))
-                return BadRequest(new ResponseDTO() { StatusCode = HttpStatusCode.BadRequest, Message = "Campo Descricao deve ser preenchido" });
+            if (addEditProcedimentoRequestDTO.Descricao == "")
+                return BadRequest(Result<string>.Failure("Campo Descricao deve ser preenchido"));
 
-            ResponseDTO responseDTO = _service.Edit(Id, addEditProcedimentoRequestDTO);
-            return new ResponseEntity().GetResponseEntity(responseDTO.StatusCode, responseDTO);
+            Result<string> result = _service.Edit(IdEmpresa, Id, addEditProcedimentoRequestDTO);
+
+            if (result.IsSuccess)
+                return Ok(result);
+
+            return BadRequest(result);
         }
 
         [HttpDelete]
-        [Route("{Id}")]
-        public IActionResult deleteProcedimento(long Id)
+        [Route("{IdEmpresa}/{Id}")]
+        public IActionResult deleteProcedimento(int IdEmpresa, long Id)
         {
-            ResponseDTO responseDTO = _service.Delete(Id);
-            return new ResponseEntity().GetResponseEntity(responseDTO.StatusCode, responseDTO);
+            Result<string> result = _service.Delete(IdEmpresa, Id);
+
+            if(result.IsSuccess)
+                return Ok(result);
+
+            return BadRequest(result);
         }
     }
 }

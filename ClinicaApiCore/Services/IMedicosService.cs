@@ -5,10 +5,10 @@ namespace ClinicaApiCore.Services
 {
     public interface IMedicosService
     {
-        List<MedicosDTO> GetAll();
-        MedicosDTO GetById(long Id);
-        MedicosDTO Add(AddEditMedicoRequestDTO addMedicoRequestDTO);
-        ResponseDTO Edit(long Id, AddEditMedicoRequestDTO addEditMedicoRequestDTO);
-        ResponseDTO Delete(long Id);
+        Result<List<MedicosDTO>> GetAll(int IdEmpresa);
+        Result<MedicosDTO> GetById(int IdEmpresa, long Id);
+        Result<MedicosDTO> Add(int IdEmpresa, AddEditMedicoRequestDTO addMedicoRequestDTO);
+        Result<string> Edit(int IdEmpresa, long Id, AddEditMedicoRequestDTO addEditMedicoRequestDTO);
+        Result<string> Delete(int IdEmpresa, long Id);
     }
 }
