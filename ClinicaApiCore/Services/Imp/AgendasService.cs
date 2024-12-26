@@ -1,4 +1,5 @@
-﻿using ClinicaApiCore.DTOs.Agendas;
+﻿using ClinicaApiCore.DTOs;
+using ClinicaApiCore.DTOs.Agendas;
 using ClinicaApiCore.Entities;
 using ClinicaApiCore.Repositories;
 using System.Globalization;
@@ -16,7 +17,7 @@ namespace ClinicaApiCore.Services.Imp
             _pacientesRepository = pacientesRepository;
         }
 
-        public List<AgendasDTO> GetByLivres(int IdEmpresa, string DataInicio, string HoraInicio, string DataFim, string HoraFim, long IdProcedimento, long IdMedico)
+        public Result<List<AgendasDTO>> GetByLivres(int IdEmpresa, string DataInicio, string HoraInicio, string DataFim, string HoraFim, long IdProcedimento, long IdMedico)
         {
             DateTime DtInicio;
             DateTime.TryParseExact(DataInicio.Trim() + " " + HoraInicio.Trim(), "dd/MM/yyyy HH:mm", new CultureInfo("pt-BR"), DateTimeStyles.None, out DtInicio);
@@ -30,49 +31,50 @@ namespace ClinicaApiCore.Services.Imp
             if (DtFim == DateTime.MinValue)
                 DtFim = DateTime.Now;
 
-            return _repository.GetByLivres(IdEmpresa, DtInicio, DtFim, IdProcedimento, IdMedico);
+            return Result<List<AgendasDTO>>.Success(_repository.GetByLivres(IdEmpresa, DtInicio, DtFim, IdProcedimento, IdMedico));
         }
 
-        public List<AgendasDTO> GetByPaciente(int IdEmpresa, long IdPaciente)
+        public Result<List<AgendasDTO>> GetByPaciente(int IdEmpresa, long IdPaciente)
         {
-            return _repository.GetByPaciente(IdEmpresa, IdPaciente);
+            return Result<List<AgendasDTO>>.Success(_repository.GetByPaciente(IdEmpresa, IdPaciente));
         }
 
-        public AgendasResponseDTO RealizarAgendamento(long IdAgenda, long IdPaciente)
+        public Result<string> RealizarAgendamento(long IdAgenda, long IdPaciente)
         {
             Agendas objAgendas = _repository.GetById(IdAgenda);
             if (objAgendas == null)
-                return new AgendasResponseDTO() { Result = "ERRO", Message = "Agendamento inexente" };
+                return Result<string>.Failure("Agendamento inexistente");
 
-            if(_pacientesRepository.GetById(objAgendas.ID_EMPRESA_INT, IdPaciente) == null)
-                return new AgendasResponseDTO() { Result = "ERRO", Message = "Paciente inexente" };
+            Pacientes objPacientes = _pacientesRepository.GetById(objAgendas.ID_EMPRESA_INT, IdPaciente);
+            if (objPacientes == null)
+                return Result<string>.Failure("Paciente inexistente ou não pertence a empresa do agendamento selecionado");
 
             if (objAgendas.ID_PACIENTE_LONG != null)
-                return new AgendasResponseDTO() { Result = "ERRO", Message = "Agendamento já realizado" };
+                return Result<string>.Failure("Agendamento já realizado");
 
             objAgendas.ID_PACIENTE_LONG = IdPaciente;
             objAgendas.ID_STATUS_INT = 1;
             objAgendas.DATA_AGENDAMENTO_DTI = DateTime.Now;
             _repository.Update(objAgendas);
 
-            return new AgendasResponseDTO() { Result = "OK", Message = "Agendamento realizado" };
+            return Result<string>.Success("Agendamento realizado");
         }
 
-        public AgendasResponseDTO CancelarAgendamento(long IdAgenda)
+        public Result<string> CancelarAgendamento(long IdAgenda)
         {
             Agendas objAgendas = _repository.GetById(IdAgenda);
             if (objAgendas == null)
-                return new AgendasResponseDTO() { Result = "ERRO", Message = "Agendamento inexente" };
+                return Result<string>.Failure("Agendamento inexistente");
 
             if (objAgendas.ID_PACIENTE_LONG == null)
-                return new AgendasResponseDTO() { Result = "ERRO", Message = "Agendamento já em status livre" };
+                return Result<string>.Failure("Agendamento já em status livre");
 
             objAgendas.ID_PACIENTE_LONG = null;
             objAgendas.ID_STATUS_INT = 0;
             objAgendas.DATA_AGENDAMENTO_DTI = null;
             _repository.Update(objAgendas);
 
-            return new AgendasResponseDTO() { Result = "OK", Message = "Agendamento cancelado" };
+            return Result<string>.Success("Agendamento cancelado");
         }
 
         //public AgendasDTO Add(AddEditProcedimentoRequestDTO addEditAgendasRequestDTO)

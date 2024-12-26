@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace ClinicaApiCore.Entities
 {
@@ -14,6 +13,7 @@ namespace ClinicaApiCore.Entities
         /// <para>0-Livre</para><para>1-Agendado</para><para>2-Em atendimento</para><para>3-Atendido</para><para>4-Cancelado</para>
         /// </summary>
         public int ID_STATUS_INT { get; set; }
+        public string STATUS_STR { get; set; }
         public long ID_EXECUTANTE_LONG { get; set; }
         public string MEDICO_STR { get; set; }
         public long ID_PROCEDIMENTO_LONG { get; set; }

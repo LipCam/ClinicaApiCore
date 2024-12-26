@@ -1,13 +1,14 @@
-﻿using ClinicaApiCore.DTOs.Pacientes;
+﻿using ClinicaApiCore.DTOs;
+using ClinicaApiCore.DTOs.Pacientes;
 
 namespace ClinicaApiCore.Services
 {
     public interface IPacientesService
     {
-        List<PacientesDTO> GetAll(int IdEmpresa);
-        PacientesDTO GetById(int IdEmpresa, long Id);
-        PacientesDTO Add(int IdEmpresa, AddEditPacienteRequestDTO addPacienteRequestDTO);
-        PacientesResponseDTO Edit(int IdEmpresa, long Id, AddEditPacienteRequestDTO addEditPacienteRequestDTO);
-        PacientesResponseDTO Delete(int IdEmpresa, long Id);
+        Result<List<PacientesDTO>> GetAll(int IdEmpresa);
+        Result<PacientesDTO> GetById(int IdEmpresa, long Id);
+        Result<PacientesDTO> Add(int IdEmpresa, AddEditPacienteRequestDTO addPacienteRequestDTO);
+        Result<string> Edit(int IdEmpresa, long Id, AddEditPacienteRequestDTO addEditPacienteRequestDTO);
+        Result<string> Delete(int IdEmpresa, long Id);
     }
 }

@@ -15,6 +15,7 @@ namespace ClinicaApiCore.Repositories.Imp
 
         public MedicosDTO Add(Medicos entity)
         {
+            entity.ID_USUARIO_LONG = _appDbContext.Medicos.Count() > 0 ? _appDbContext.Medicos.Max(p=> p.ID_USUARIO_LONG) + 1 : 1;
             _appDbContext.Medicos.Add(entity);
             _appDbContext.SaveChanges();
 

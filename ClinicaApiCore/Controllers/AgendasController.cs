@@ -1,4 +1,5 @@
-﻿using ClinicaApiCore.DTOs.Agendas;
+﻿using ClinicaApiCore.DTOs;
+using ClinicaApiCore.DTOs.Agendas;
 using ClinicaApiCore.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,7 +20,7 @@ namespace ClinicaApiCore.Controllers
         [Route("Disponiveis/{IdEmpresa}")]
         public IActionResult GetByLivres(int IdEmpresa, string DataInicio = "", string HoraInicio = "", string DataFim = "", string HoraFim = "", long IdProcedimento = 0, long IdMedico = 0)
         {
-            List<AgendasDTO> lstAgendasDTO = _service.GetByLivres(IdEmpresa, DataInicio, HoraInicio, DataFim, HoraFim, IdProcedimento, IdMedico);
+            Result<List<AgendasDTO>> lstAgendasDTO = _service.GetByLivres(IdEmpresa, DataInicio, HoraInicio, DataFim, HoraFim, IdProcedimento, IdMedico);
             return Ok(lstAgendasDTO);
         }
 
@@ -27,7 +28,7 @@ namespace ClinicaApiCore.Controllers
         [Route("Paciente/{IdEmpresa}/{IdPaciente}")]
         public IActionResult GetById(int IdEmpresa, long IdPaciente)
         {
-            List<AgendasDTO> lstAgendasDTO = _service.GetByPaciente(IdEmpresa, IdPaciente);
+            Result<List<AgendasDTO>> lstAgendasDTO = _service.GetByPaciente(IdEmpresa, IdPaciente);
             return Ok(lstAgendasDTO);
         }
 
@@ -35,16 +36,16 @@ namespace ClinicaApiCore.Controllers
         public IActionResult RealizarAgendamento([FromBody] RealizarAgendaRequestDTO realizarAgdRequest)
         {  
             if (realizarAgdRequest.IdAgenda == 0)
-                return BadRequest(new AgendasResponseDTO() { Result = "ERRO", Message = "Campo IdAgenda deve ser preenchido" });
+                return BadRequest(Result<string>.Failure("Campo IdAgenda deve ser preenchido"));
 
             if (realizarAgdRequest.IdPaciente == 0)
-                return BadRequest(new AgendasResponseDTO() { Result = "ERRO", Message = "Campo IdPaciente deve ser preenchido" });
+                return BadRequest(Result<string>.Failure("Campo IdPaciente deve ser preenchido"));
 
-            AgendasResponseDTO objAgendamentodResponse = _service.RealizarAgendamento(realizarAgdRequest.IdAgenda, realizarAgdRequest.IdPaciente);
-            if (objAgendamentodResponse.Result == "OK")
-                return Ok(objAgendamentodResponse);
+            Result<string> objResponseDTO = _service.RealizarAgendamento(realizarAgdRequest.IdAgenda, realizarAgdRequest.IdPaciente);
+            if (objResponseDTO.IsSuccess)
+                return Ok(objResponseDTO);
             else
-                return BadRequest(objAgendamentodResponse);
+                return BadRequest(objResponseDTO);
         }
 
         [HttpDelete]
@@ -52,13 +53,13 @@ namespace ClinicaApiCore.Controllers
         public IActionResult CancelarAgendamento(long IdAgenda)
         {
             if (IdAgenda == 0)
-                return BadRequest(new AgendasResponseDTO() { Result = "ERRO", Message = "Campo IdAgenda deve ser preenchido" });
+                return BadRequest(Result<string>.Failure("Campo IdAgenda deve ser preenchido"));
 
-            AgendasResponseDTO objAgendamentodResponse = _service.CancelarAgendamento(IdAgenda);
-            if (objAgendamentodResponse.Result == "OK")
-                return Ok(objAgendamentodResponse);
+            Result<string> objResponseDTO = _service.CancelarAgendamento(IdAgenda);
+            if (objResponseDTO.IsSuccess)
+                return Ok(objResponseDTO);
             else
-                return BadRequest(objAgendamentodResponse);
+                return BadRequest(objResponseDTO);
         }
     }
 }

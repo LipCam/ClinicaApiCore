@@ -25,12 +25,14 @@ namespace ClinicaApiCore.Repositories.Imp
         {
             string SQL = @"SELECT AGD.ID_AGENDA_LONG,
 	                            AGD.DATA_AGENDA_INICIO_DTI,
-	                            ID_STATUS_INT,
+	                            AGD.ID_STATUS_INT,
+                                ST.DESCRICAO_STR AS STATUS_STR,
 	                            AGD.ID_EXECUTANTE_LONG,
 	                            MED.NOME_STR AS MEDICO_STR,
 	                            AGD.ID_PROCEDIMENTO_LONG,
 	                            PRC.DESCRICAO_STR AS PROCEDIMENTO_STR
                             FROM ATE_AGENDAS_TAB AGD WITH(NOLOCK)
+                            INNER JOIN SIS_STATUS_AGENDA_TAB ST WITH(NOLOCK) ON ST.ID_STATUS_INT = AGD.ID_STATUS_INT
                             INNER JOIN CAD_USUARIOS_TAB MED WITH(NOLOCK) ON MED.ID_USUARIO_LONG = AGD.ID_EXECUTANTE_LONG
                             INNER JOIN CAD_PROCEDIMENTOS_TAB PRC WITH(NOLOCK) ON PRC.ID_PROCEDIMENTO_LONG = AGD.ID_PROCEDIMENTO_LONG
                             WHERE AGD.ID_EMPRESA_INT = @ID_EMPRESA_INT AND AGD.ID_STATUS_INT = -1 AND AGD.DATA_AGENDA_INICIO_DTI BETWEEN @DATA_INICIO_DTI AND @DATA_FIM_DTI 
@@ -52,6 +54,7 @@ namespace ClinicaApiCore.Repositories.Imp
                     IdAgenda = p.ID_AGENDA_LONG,
                     Data = p.DATA_AGENDA_INICIO_DTI,
                     IdStatus = p.ID_STATUS_INT,
+                    Status = p.STATUS_STR,
                     IdMedico = p.ID_EXECUTANTE_LONG,
                     Medico = p.MEDICO_STR,
                     IdProcedimento = p.ID_PROCEDIMENTO_LONG,
@@ -83,6 +86,7 @@ namespace ClinicaApiCore.Repositories.Imp
                     IdAgenda = p.ID_AGENDA_LONG,
                     Data = p.DATA_AGENDA_INICIO_DTI,
                     IdStatus = p.ID_STATUS_INT,
+                    Status = p.StatusAgd.DESCRICAO_STR,
                     IdMedico = p.ID_EXECUTANTE_LONG,
                     Medico = p.Medicos.NOME_STR,
                     IdProcedimento = p.ID_PROCEDIMENTO_LONG,

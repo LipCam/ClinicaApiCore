@@ -15,6 +15,8 @@ namespace ClinicaApiCore.Entities
         /// <para>0-Livre</para><para>1-Agendado</para><para>2-Em atendimento</para><para>3-Atendido</para>
         /// </summary>
         public int ID_STATUS_INT { get; set; }
+        [ForeignKey("ID_STATUS_INT")]
+        public StatusAgenda StatusAgd { get; set; }
 
         public long? ID_PACIENTE_LONG { get; set; }
         [ForeignKey("ID_PACIENTE_LONG")]
